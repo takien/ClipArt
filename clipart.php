@@ -130,6 +130,8 @@ function clipart_save_callback() {
 		$path 		= $paths['path'];
 		$att_url	= $paths['url'];
 		
+		//create unique filename
+		$filename   = wp_unique_filename( $path, $filename );
 		if(file_put_contents($path.'/'.$filename,$file_content)){
 			  require_once(ABSPATH . 'wp-admin/includes/image.php');
 				
