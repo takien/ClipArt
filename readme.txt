@@ -34,6 +34,7 @@ There are many ways to install this plugin, e.g:
 1. Insert ClipArt into post
 2. Manage ClipArt tags
 3. Download ClipArt from openclipart.org
+4. CliArt in action
 
 
 == Changelog ==

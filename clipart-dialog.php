@@ -13,9 +13,6 @@ header('Content-Type: text/html; charset=' . get_bloginfo('charset'));
 <link type="text/css" rel="stylesheet" href="<?php echo $plugin_url.'css/foundation.min.css';?>"/>
 <link type="text/css" rel="stylesheet" href="<?php echo $plugin_url.'css/clipart-dialog.css';?>"/>
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
-<?php
-wp_enqueue_script('jquery');
-?>
 <script type="text/javascript" src="<?php echo $plugin_url.'js/jquery.foundation.tabs.js';?>"></script>
 	
 </head>

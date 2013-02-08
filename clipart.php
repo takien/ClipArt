@@ -10,7 +10,7 @@ Author URI: http://takien.com/
 defined('ABSPATH') or die();
 define('CLIPART_CACHE_DIR',dirname(__FILE__).'/cache');
 
-require_once(dirname(__FILE__).'/inc/takien-plugin-options.php');
+//require_once(dirname(__FILE__).'/inc/takien-plugin-options.php');
 require_once(dirname(__FILE__).'/inc/paging.php');
 
 function clipart_admin_notice(){
@@ -120,9 +120,9 @@ function clipart_save_callback() {
 	//make sure response is OK
 	if(!is_object($remote)) {
 		$content_type = $remote['headers']['content-type'];
-		$filenames    = explode('.',$clipart_url);
+		$filenames    = explode('.',end(explode('/',$clipart_url)));
 		$ext          = end($filenames);
-		$filename     = str_ireplace('.'.$ext,'',$clipart_url);
+		$filename     = str_ireplace('.'.$ext,'',$filenames[0]);
 		$filename     = 'clipart-'.sanitize_title_with_dashes($filename).'.'.$ext;
 		$file_content = wp_remote_retrieve_body($remote);
 		
