@@ -265,10 +265,16 @@ header('Content-Type: text/html; charset=' . get_bloginfo('charset'));
 	</li><!--tabs2-->
 	<li id="aboutTab">
 		<div class="wrap">
-			<h2><?php _e('About ClipArt','clipart'); ?></h2>
-			<p><img class="clipart-logo" src="<?php echo plugins_url('images/clipart-logo.png',__FILE__);?>" alt=""/><?php printf(__('ClipArt is a WordPress plugin to collect, organize, and insert clip art on your WordPress site. ClipArt also allow you to search online clipart from <a target="_blank" href="%s">Open Clip Art Library</a> and download them to your library.','clipart'),'http://openclipart.org');?></p>
+			<div class="row">
+			<div class="six columns">
+				<h2><?php _e('About ClipArt','clipart'); ?></h2>
+				<p><img class="clipart-logo" src="<?php echo plugins_url('images/clipart-logo.png',__FILE__);?>" alt=""/><?php printf(__('ClipArt is a WordPress plugin to collect, organize, and insert clip art on your WordPress site. ClipArt also allow you to search online clipart from <a target="_blank" href="%s">Open Clip Art Library</a> and download them to your library.','clipart'),'http://openclipart.org');?></p>
+			</div>
+			<div class="six columns">
 			<h3><?php _e('About','clipart'); ?> Open Clip Art Library (OCAL)</h3>
-			<p><img class="clipart-logo" src="<?php echo plugins_url('images/openclipart-logo.jpg',__FILE__);?>" alt=""/><?php printf(__('Open Clip Art Library (OCAL) is the largest collaborative community that creates, shares and remixes clipart. All clipart is released to the public domain and may be used in any project for free with no restrictions. Open Clip Art Library website is <a href="%s">here</a>','clipart'),'http://openclipart.org');?></p>
+				<p><img class="clipart-logo" src="<?php echo plugins_url('images/openclipart-logo.jpg',__FILE__);?>" alt=""/><?php printf(__('Open Clip Art Library (OCAL) is the largest collaborative community that creates, shares and remixes clipart. All clipart is released to the public domain and may be used in any project for free with no restrictions. Open Clip Art Library website is <a href="%s">here</a>','clipart'),'http://openclipart.org');?></p>
+			</div>
+			</div>
 			<h3><?php _e('Support','clipart'); ?></h3>
 			<p><?php printf(__('Please visit my website <a href="%s" target="_blank">http://takien.com</a> to get support of this plugin.','clipart'),'http://takien.com');?></p>
 			<h3>Cache</h3>
