@@ -65,4 +65,6 @@
   };
 }(jQuery, this, this.document));
 
-$.fn.foundationTabs ? $(document).foundationTabs() : null;
+jQuery(document).ready(function($){
+	$.fn.foundationTabs ? $(document).foundationTabs() : null;
+});

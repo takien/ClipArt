@@ -31,12 +31,25 @@ function clipart_admin_notice(){
 add_action('admin_notices', 'clipart_admin_notice');
 
 /**
+ * Enqueue Scripts.
+ * 
+ */
+
+function clipart_enqueue_script() {
+	//foundation tabs.
+	if(isset($_GET['insert_clipart_dialog'])) {
+		wp_enqueue_script('foundation-tab',plugins_url('/js/jquery.foundation.tabs.js',__FILE__),array('jquery'),0.1);
+	}
+}
+add_action( 'admin_enqueue_scripts' ,'clipart_enqueue_script' );
+/**
  * Add ClipArt tags to the media library
  */
 
 add_action( 'init', 'clipart_plugin_init' );
 
 function clipart_plugin_init() {
+
 	//register taxonomy
 	$labels = array(
 		'name'          => __('ClipArt Tags'),

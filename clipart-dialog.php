@@ -8,13 +8,13 @@ header('Content-Type: text/html; charset=' . get_bloginfo('charset'));
 <meta http-equiv="Content-Type" content="<?php bloginfo('html_type'); ?>; charset=<?php echo get_option('blog_charset'); ?>" />
 <title><?php _e('Insert ClipArt','clipart'); ?></title>
 
-
 <script type="text/javascript" src="<?php echo includes_url('/js/tinymce/tiny_mce_popup.js');?>"></script>
 <link type="text/css" rel="stylesheet" href="<?php echo $plugin_url.'css/foundation.min.css';?>"/>
 <link type="text/css" rel="stylesheet" href="<?php echo $plugin_url.'css/clipart-dialog.css';?>"/>
-<script type="text/javascript" src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
-<script type="text/javascript" src="<?php echo $plugin_url.'js/jquery.foundation.tabs.js';?>"></script>
-	
+<?php 
+	do_action('admin_enqueue_scripts');
+	do_action('admin_print_scripts');
+?>
 </head>
 <body>
 	
