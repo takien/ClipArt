@@ -10,19 +10,94 @@ Author URI: http://takien.com/
 defined('ABSPATH') or die();
 define('CLIPART_CACHE_DIR',dirname(__FILE__).'/cache');
 
+//in this version, plugin option not yet used.
 //require_once(dirname(__FILE__).'/inc/takien-plugin-options.php');
 require_once(dirname(__FILE__).'/inc/paging.php');
+
+/**
+ * Make plugin text translateable.
+ * 
+ */
+
+function clipart_plugin_l10n() {
+	load_plugin_textdomain( 'clipart', false, basename( dirname( __FILE__ ) ) . '/languages' );
+}
+add_action( 'plugins_loaded' , 'clipart_plugin_l10n' );
+
+/**
+ * ClipArt plugin init, register taxonomy.
+ */
+
+function clipart_plugin_init() {
+	
+	//register taxonomy
+	$labels = array(
+	'name'          => __('ClipArt Tags'),
+	'singular_name' => 'clipart-tags',
+	); 	
+	
+	register_taxonomy('clipart_tags',array('attachment'), array(
+	'hierarchical'      => false,
+	'update_count_callback'=> 'clipart_tags_count',
+	'labels'            => $labels,
+	'show_admin_column' => true,
+	'query_var'         => false,
+	'rewrite'           => false
+	));
+	
+}
+
+add_action( 'init', 'clipart_plugin_init' );
+
+/**
+ * Callback for update_count_callback
+ * 
+ */
+
+function clipart_tags_count($terms,$taxonomy) {
+	_update_post_term_count( $terms, $taxonomy );
+	_update_generic_term_count( $terms, $taxonomy );
+}
+
+/**
+ * Use admin init instead of init to make sure loaded only on admin area
+ * 
+ */
+
+function clipart_admin_init() {
+	//delete cache file
+	if(isset($_GET['delete_clipart_files'])) {
+		$dir = scandir(CLIPART_CACHE_DIR);
+		foreach($dir as $file) {
+			if(is_file(CLIPART_CACHE_DIR.'/'.$file) AND ($file !== 'index.html')) {
+				@unlink(CLIPART_CACHE_DIR.'/'.$file);
+			}
+		}
+	}
+	//tinymce dialog
+	if(isset($_GET['insert_clipart_dialog'])) {
+		$plugin_url = plugins_url('/', __FILE__);
+		include(dirname(__FILE__).'/clipart-dialog.php');
+		exit;
+	}
+}
+add_action( 'admin_init', 'clipart_admin_init' );
+
+/**
+ * Add admin warning if system or WordPress version does not meet the plugin requirements. 
+ * 
+ */
 
 function clipart_admin_notice(){
 	$error = false;
 	if ( version_compare( $GLOBALS['wp_version'], 3.5, '<') ) {
-		$error = '<p><strong>ClipArt</strong> is installed but not compatible with your current WordPress version. ClipArt requires at least WordPress version 3.5. Please <a href="plugins.php">deactivate ClipArt</a> plugin or update your <a href="update-core.php">WordPress</a>.</p>';
+		$error = '<p>'.sprintf( __('<strong>%1$s</strong> is installed but not compatible with your current WordPress version. %1$s requires at least WordPress version 3.5. Please <a href="%2$s">deactivate %1$s</a> plugin or update your <a href="%3$s">WordPress</a>', 'clipart'),'ClipArt' ,'plugins.php' ,'update-core.php').'</p>';
 	}
 	if(!function_exists('json_encode') OR !function_exists('file_put_contents') OR !function_exists('scandir') OR !function_exists('_update_generic_term_count') OR !function_exists('_update_post_term_count')) {
-		$error .= '<p><strong>ClipArt</strong> is installed but some required functions are not available.</p>';
+		$error .= '<p>'.sprintf( __('<strong>%s</strong> is installed but some required functions are not available.','clipart'),'ClipArt').'</p>';
 	}
 	if(!is_writeable(CLIPART_CACHE_DIR)) {
-		$error .= '<p><strong>ClipArt</strong> is installed, but <strong>'.CLIPART_CACHE_DIR.'</strong> is not writeable. Make sure you set permision to 777 or 775</p>';
+		$error .= '<p>'.sprintf( __('<strong>%1$s</strong> is installed but <strong>%2$s</strong> is not writeable. Make sure you set permission to 777 or 755.','clipart'),'ClipArt',CLIPART_CACHE_DIR ).'</p>';
 	}
 	if($error) {
 		echo '<div class="error">'.$error.'</div>';
@@ -42,51 +117,7 @@ function clipart_enqueue_script() {
 	}
 }
 add_action( 'admin_enqueue_scripts' ,'clipart_enqueue_script' );
-/**
- * Add ClipArt tags to the media library
- */
 
-add_action( 'init', 'clipart_plugin_init' );
-
-function clipart_plugin_init() {
-
-	//register taxonomy
-	$labels = array(
-		'name'          => __('ClipArt Tags'),
-		'singular_name' => 'clipart-tags',
-	); 	
-	
-	register_taxonomy('clipart_tags',array('attachment'), array(
-		'hierarchical'      => false,
-		'update_count_callback'=> 'clipart_tags_count',
-		'labels'            => $labels,
-		'show_admin_column' => true,
-		'query_var'         => false,
-		'rewrite'           => false
-	));
-	
-	//delete cache file
-	if(isset($_GET['delete_clipart_files'])) {
-		$dir = scandir(CLIPART_CACHE_DIR);
-		foreach($dir as $file) {
-			if(is_file(CLIPART_CACHE_DIR.'/'.$file) AND ($file !== 'index.html')) {
-				@unlink(CLIPART_CACHE_DIR.'/'.$file);
-			}
-		}
-	}
-	//tinymce dialog
-	if(isset($_GET['insert_clipart_dialog'])) {
-		$plugin_url = plugins_url('/', __FILE__);
-		include(dirname(__FILE__).'/clipart-dialog.php');
-		exit;
-	}
-	
-}
-
-function clipart_tags_count($terms,$taxonomy) {
-	_update_post_term_count( $terms, $taxonomy );
-	_update_generic_term_count( $terms, $taxonomy );
-}
 /**
  * Add Insert ClipArt TinyMCE button.
  * 
@@ -177,6 +208,12 @@ function clipart_save_callback() {
 	echo json_encode($result);
 	exit;
 }
+
+/**
+ * Check whether clipart already imported to library.
+ * 
+ * @param string clipart_id 
+ */
 
 function is_clipart_already_exists($clipart_id='') {
 	global $wpdb;

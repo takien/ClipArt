@@ -254,7 +254,11 @@ header('Content-Type: text/html; charset=' . get_bloginfo('charset'));
 			</div>
 			<div class="row">
 				<div class="columns eight">
-					<p class="clipart-note"><strong>Note: </strong>ClipArt bordered with gray is indicated that ClipArt is already saved to Library.</p>
+					<p class="clipart-note"><strong><?php _e('Note','clipart');?>: </strong>
+					<?php 
+						printf( __('<strong>%1$s</strong> bordered with gray is indicated that %1$s is already saved to Library.','clipart'),'ClipArt' );
+					?>
+					</p>
 				</div>
 				<div class="four columns text-right">
 					<input id="save_to_library" type="submit" class="button disabled" value="Save to Library"/>
@@ -277,8 +281,12 @@ header('Content-Type: text/html; charset=' . get_bloginfo('charset'));
 			</div>
 			<h3><?php _e('Support','clipart'); ?></h3>
 			<p><?php printf(__('Please visit my website <a href="%s" target="_blank">http://takien.com</a> to get support of this plugin.','clipart'),'http://takien.com');?></p>
-			<h3>Cache</h3>
-			<p>ClipArt use cache to store search result from http://openclipart.org. If you think this waste your space, you can delete those files.</p>
+			<h3><?php _e('Cache','clipart');?></h3>
+			<p>
+			<?php 
+			printf( __('<strong>%1$s</strong> uses cache to store search result from %2$s. If you think this waste your space, you can delete those files.','clipart'),'ClipArt','http://openclipart.org' );
+			?>
+			</p>
 			<p>
 				<form action="<?php echo admin_url('/');?>">
 				<input type="hidden" value="1" name="insert_clipart_dialog" />
